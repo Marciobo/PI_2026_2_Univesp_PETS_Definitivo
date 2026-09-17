@@ -1,0 +1,191 @@
+{% macro render_navbar(render_forms = True) %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url_for('home') }}"><img src="{{ url_for('static', filename = 'sample_images/alpha.png') }}" alt="" width="30" height="30" class="d-inline-block align-text-top me-2" style = 'border-radius: 50%;' >
+            Alpha Classificados</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('criar_anuncio') }}">Anunciar</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Sobre</a>
+                </li>
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Categorias
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    {% for categoria in config.CATEGORIAS %}
+                        <li><a class="dropdown-item" href="/categorias/{{ config.MAPPING_CATEGORIAS.get(categoria, '') }}">{{ categoria }}</a></li>
+                    {% endfor %}
+                </ul>
+                </li>
+            </ul>
+        </div>
+        {% if render_forms %}
+        <!-- ALTERADO: adicionado action e name para busca por texto funcionar -->
+        <form class="d-flex" action="{{ url_for('buscar') }}" method="get">
+            <input class="form-control me-2" type="search" name="q"placeholder="Buscar" aria-label="Busca">
+            <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+        {% endif %}
+    </div>
+</nav>
+{% endmacro %}
+
+{% macro display_flashed(messages) %}
+<div class="container mt-3">
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+</div>
+
+{% endmacro %}
+
+{% macro render_navbar_with_login(user, render_forms = True) %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='sample_logo.jpg') }}" alt="" width="30" height="30" class="d-inline-block align-text-top me-2" style="border-radius: 50%;">
+            Arcadia
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Anunciar</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Categorias
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="#">Cat1</a></li>
+                        <li><a class="dropdown-item" href="#">Cat2</a></li>
+                        <li><a class="dropdown-item" href="#">Cat3</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            {% if render_forms %}
+            <form class="d-flex me-3">
+                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Busca">
+                <button class="btn btn-outline-success" type="submit">Buscar</button>
+            </form>
+            {% endif %}
+
+            <ul class="navbar-nav">
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Olá, {{ user.name }}! </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                            <li><a class="dropdown-item" href="#">Perfil</a></li>
+                            <li><a class="dropdown-item" href="#">Meus anúncios</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}">Sair</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="{{ url_for('login_teste') }}">Entrar</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endmacro %}
+
+{% macro render_hero(type = 'neutro') %}
+<div class="hero-{{ type }} py-5 text-center shadow-sm">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Alpha Classificados</h1>
+        <p class="lead">Classificados diversos para moradores de condomínio no ABC.</p>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_sample_card(col_size = 4, category = 'Comida') %}
+<div class="col-{{ col_size }}">
+    <div class="card h-100 shadow-sm"> <div class="position-relative">
+            <img  src="https://www.viewhotels.jp/asakusa-annex/wp-content/uploads/sites/6/2020/03/test-img.jpg" class="card-img-top" alt="...">
+
+            <span class="badge bg-secondary position-absolute top-0 start-0 m-2 shadow">{{ category }}</span>
+        </div>
+        
+        <div class="card-body">
+            <h5 class="card-title">Título do Bolo</h5>
+            <p class="card-text text-truncate">Estou vendendo bolo para moradores do condomínio arcadia. Entrar em contato via telefone...</p>
+        </div>
+        <div class="card-footer bg-white border-top-0"> <a href="#" class="btn btn-outline-primary btn-sm w-100">Ver detalhes</a>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro create_carousel(image_list) %}
+    {% if image_list and (image_list | length) > 0 %}
+    <div class="row">
+        <div class="col-12 mb-4">
+            <img id="imagemPrincipal" src="{{ image_list[0] }}" class="img-fluid rounded border" style="height: 50vh; width: 100%; object-fit: contain;" alt="Imagem principal do anúncio">
+        </div>
+        
+        {% if (image_list | length) > 1 %}
+        <div class="col-12 d-flex justify-content-center overflow-auto">
+            {% for img_url in image_list %}
+                <img src="{{ img_url }}" class="img-thumbnail" onmouseover="trocarImagem(this.src)" style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;">
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function trocarImagem(novaUrl) {
+            document.getElementById('imagemPrincipal').src = novaUrl;
+        }
+    </script>
+    {% endif %}
+{% endmacro %}
+
+{% macro render_anuncio(anuncio, col_size = 3) %}
+<div class="col-12 col-md-6 col-lg-4 col-xl-3">
+    <div class="card h-100 position-relative card-hover shadow-sm">
+        
+        <div class="position-relative">
+            <img src="{{ anuncio.url }}" class="card-img-top" alt="..." style = 'height:200px; width: 100%; object-fit:cover;'>
+            <span class="badge bg-secondary position-absolute top-0 start-0 m-2 shadow-sm">{{ anuncio.categoria }}</span>
+        </div>
+
+        <div class="card-body">
+            <h5 class="card-title text-dark">{{ anuncio.titulo }}</h5>
+            <p class="card-text text-muted text-truncate">
+                {{ anuncio.descricao }}
+            </p>
+            
+            <a href="{{ url_for('detalhe_anuncio', id=anuncio.id) }}" class="stretched-link"></a>
+        </div>
+
+        <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
+            {# ALTERADO: formatando preço com vírgula no padrão brasileiro #}
+            <span class="fw-bold text-success fs-5">{% if anuncio.preco %}R$ {{ "%.2f"|format(anuncio.preco)|replace(".", ",") }}{% endif %}</span>
+            <small class="text-muted">{{ anuncio.autor }}</small>
+        </div>
+    </div>
+</div>
+{% endmacro %}

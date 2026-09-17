@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}{{ anuncio.titulo }}{% endblock %}
+{% import 'macros.html' as macros %}
+{% block content %}
+<div class = 'container-md container-fluid mb-5'>
+    <div class = 'row mt-3 mb-2'>
+
+        {% if anuncio.imagens %}
+        <div class = 'col-lg-6 col-md-12'>
+            {{ macros.create_carousel(anuncio.imagens) }}
+        </div>
+        <div class = 'col-lg-6 col-md-12 bg-light p-4 shadow-sm rounded d-flex flex-column'>
+
+            
+        {% else %}
+        <div class = 'col-12 bg-light p-4 shadow-sm rounded d-flex flex-column'>
+        {% endif %}
+            
+        <div class="d-flex justify-content-between align-items-start px-2 mb-3">
+            <div>
+                <h1 class="h2 mb-1 fw-bold">{{ anuncio.titulo }}</h1>
+                    <span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-secondary">{{ anuncio.categoria | capitalize }}</span>
+                    <span class="badge rounded-pill bg-light text-dark border ms-1">{{ anuncio.tipo.replace('c', 'ç') | capitalize }}</span>
+            </div>
+
+            {% if anuncio.preco %}
+            <div class="text-center">
+                <span class="text-muted small d-block">Preço</span>
+                {# ALTERADO: formatando preço com vírgula no padrão brasileiro, adicionado text-nowrap para o preço não quebrar em duas linhas #}
+                <h2 class="h3 text-success fw-bold mb-0 text-nowrap">{% if anuncio.preco %}R$ {{ "%.2f"|format(anuncio.preco)|replace(".", ",") }}{% endif %}</h2>
+            </div>
+            {% endif %}
+        </div>
+            <p class = "flex-grow-1"><b class = "text-secondary">Descrição:</b> {{ anuncio.descricao }}</p>
+            <div class = 'row mb-2'>
+                <div class = 'col-lg-6 col-md-12 border-1 border-end'>
+                    <h4 class = 'h4 text-body-secondary mb-2'>Informações de Contato</h2>
+                    <p><b class = "text-secondary">Autor:</b> {{ anuncio.autor }}</p>
+                    <p><b class = "text-secondary">Apto:</b> {% if anuncio.apto  %}{{ anuncio.apto }}{% else %}N/A{% endif %}</p>
+                    <p><b class = "text-secondary">Telefone:</b> {% if anuncio.telefone  %}{{ anuncio.telefone }}{% else %}N/A{% endif %}</p>
+                    <p><b class = "text-secondary">E-mail:</b> {% if anuncio.email  %}{{ anuncio.email }}{% else %}N/A{% endif %}</p>
+                    
+                </div>
+                <div class = 'col-md-12 col-lg-6 px-3'>
+                    <h4 class = 'h4 text-body-secondary mb-2'>Detalhes</h2>
+                    <p><b class = "text-secondary">Tipo:</b> {{ anuncio.tipo.replace('c', 'ç') | capitalize }}</p>
+                    <p><b class = "text-secondary">Categoria:</b> {{ anuncio.categoria | capitalize }}</p>
+                    <p><b class = "text-secondary">Criado em:</b> {{ anuncio.data_criacao.strftime('%d/%m/%Y %H:%M') }}</p>
+                    <p><b class = "text-secondary">Atualizado em:</b> {% if anuncio.data_atualizacao %}{{ anuncio.data_atualizacao.strftime('%d/%m/%Y %H:%M') }}{% else %}Nunca{% endif %}</p>
+                    <div class = 'text-center'>
+                        <a href = "{{ url_for('editar_anuncio', id = anuncio.id) }}"><button type="button" class="btn btn-sm btn-secondary">Atualizar anúncio</button></a>
+                        <button data-bs-toggle="modal" data-bs-target="#confirmarExclusao" class="btn btn-sm btn-danger">Excluir anúncio</button>
+                        <div class="modal fade" id="confirmarExclusao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Atenção!</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Tem certeza que quer excluir esse anúncio?
+                                </div>
+                                    <div class="modal-footer">
+                                        <form name = "delete-form" id="delete-form" action="{{ url_for('deletar_anuncio', id = anuncio.id )}}" method="POST" style="display: none;"></form>
+                                        <button name = 'btn' value = "123" type = "submit"  form = "delete-form" class="btn btn-danger">Excluir</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+</div>
+{% endblock %}

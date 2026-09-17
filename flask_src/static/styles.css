@@ -1,0 +1,62 @@
+.hero-gradiente {
+      background: linear-gradient(to right, #ff6ec4, #7986cb);
+      color: #fff;
+      padding: 5rem 0;
+    }
+
+    .hero-gradiente h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-gradiente p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-gradiente .btn {
+      background-color: #fff;
+      color: #7986cb;
+      font-weight: bold;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .hero-gradiente .btn:hover {
+      background-color: #7986cb;
+      color: #fff;
+    }
+
+.hero-neutro {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+}
+
+.hero-chumbado {
+    background: linear-gradient(to right, #232526 0%, #414345 100%);
+    color: white;
+}
+
+.hero-blue {
+    background: linear-gradient(to right, #4ca1af 0%, #2c3e50 100%);
+    color: white;
+}
+
+.carousel-item img {
+    width: 100%;           /* Garante que preencha a largura do container */
+    height: 50vh;          /* Fixa em 50% da altura da tela */
+    object-fit: cover;     /* IMPORTANTE: Mantém a proporção sem distorcer a imagem */
+    object-position: center; /* Centraliza o corte da imagem */
+}
+
+.card-hover {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    text-decoration: none; /* Garante que o texto não fique sublinhado */
+    color: inherit; /* Mantém a cor original do texto */
+}
+
+.card-hover:hover {
+    transform: translateY(-5px); /* Eleva o card levemente */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important; /* Sombra mais profunda */
+    cursor: pointer;
+}

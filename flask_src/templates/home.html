@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Alpha Classificados - Home{% endblock %}
+{% block content %}
+{% import 'macros.html' as macros with context %}
+<!-- ALTERADO: título dinâmico para busca e categoria -->
+<h1 class = 'col-12 h1 my-4 text-center'>{{ titulo if titulo else 'Classificados recentes' }}</h1>
+    
+    <div class = 'container d-flex flex-column flex-grow-1'>
+        
+    <div class = 'row bg-light flex-grow-1 g-4 mb-3', styles = 'height: 100vh;'>
+        {% if not pagination.items %}
+        <div class="col-12 alert alert-warning text-center fade show" role="alert">
+            Sem anúncios a exibir.
+        </div>
+        {% endif %}
+
+        
+        
+        {% for anuncio in pagination.items %}
+        {{macros.render_anuncio(anuncio)}}
+        {% endfor %}
+        
+        {% from 'bootstrap5/pagination.html' import render_pagination %}
+        {{ render_pagination(pagination, prev = 'Anterior', next = 'Próximo', align = 'center') }}
+    </div>
+</div>
+{% endblock %}
